@@ -29,9 +29,7 @@ __kernel void Calculate(
 	__constant int * in_matrix,
 	int steps,
 	int cores,
-	__constant float2 * pos,
-	__global float2 * dir,
-	__constant float * mass,
+	__global float * planetData,
 	int planetCount,
 	float elapsedTime,
 	float simSpeed)
@@ -40,9 +38,32 @@ __kernel void Calculate(
 	struct Heap heap = Heap_ctor(heapStart);
 
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
-	struct PlanetData data = CreatePlanetData(pos, dir, mass, planetCount, elapsedTime, simSpeed);
+	 // Planet_ctor((__global float2 *)&planetData[0], (__global float2 *)&planetData[2], &planetData[4]);
+	//struct Planet planet2 = PlanetFromIndexedData(planetData, 1);
 
-	printf("test");
+	//planetData[9] = 3.5;
+
+		struct Planet planet = PlanetFromIndexedData(planetData, 1);
+		planet.pos->x = 1;
+		// planet.pos->y = 1;
+		// planet.dir->x = 1;
+		// planet.dir->y = 1;
+		// *planet.mass = 1;
+
+	// for(int i = 0; i < planetCount; i++)
+	// {
+	// 	struct Planet planet = PlanetFromIndexedData(planetData, i);
+	// 	planet.pos->x = i;
+	// 	planet.pos->y = i;
+	// 	planet.dir->x = i;
+	// 	planet.dir->y = i;
+	// 	*planet.mass = i;
+	// }
+		
+	// planetData[0] = 2;
+
+	// planet1.pos->y = 0.5;
+	// planet2.pos->x = 3.5;
 
 	// calculation magic here
 }
