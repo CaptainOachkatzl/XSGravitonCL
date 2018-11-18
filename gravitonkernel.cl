@@ -1,5 +1,6 @@
 ﻿#include "RTTMatrix.cl"
-#include "Planet.cl"
+#include "Stack.cl"
+
 
  void Gravity(
  	__global float2 * out_dir1,
@@ -35,6 +36,9 @@ __kernel void Calculate(
 	float elapsedTime,
 	float simSpeed)
 {
+	uchar heapStart[512];
+	struct Heap heap = Heap_ctor(heapStart);
+
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
 	struct PlanetData data = CreatePlanetData(pos, dir, mass, planetCount, elapsedTime, simSpeed);
 
