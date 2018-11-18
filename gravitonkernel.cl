@@ -5,7 +5,7 @@
 	int _cores;
 };
 
-struct RRTMatrix SetRRTMatrix(
+struct RRTMatrix CreateRRTMatrix(
 	__local int * in_matrix,
 	int steps,
 	int cores)
@@ -18,28 +18,39 @@ struct RRTMatrix SetRRTMatrix(
 	return matrix;
 }
 
-//  __local float2 * pos;
-//  __local float2 * dir;
-//  __local float * mass;
-//int _planetCount;
-//float _elapsedTime;
-//float _simSpeed;
+struct PlanetData
+{
+	__local float2 * pos;
+	__local float2 * dir;
+	__local float * mass;
+	int planetCount;
+	float elapsedTime;
+	float simSpeed;
+};
 
-// void SetPlanetData(
-// 	__global float2 * pos,
-// 	__global float2 * dir,
-// 	__global float * mass,
-// 	int planetCount,
-// 	float elapsedTime,
-// 	float simSpeed)
-// {
-// 	_pos = pos;
-// 	_dir = dir;
-// 	_mass = mass;
-// 	_planetCount = planetCount;
-// 	_elapsedTime = elapsedTime;
-// 	_simSpeed = simSpeed;
-// }
+struct PlanetData CreatePlanetData(
+	__local float2 * pos,
+	__local float2 * dir,
+	__local float * mass,
+	int planetCount,
+	float elapsedTime,
+	float simSpeed)
+{
+	struct PlanetData data;
+	data.pos = pos;
+	data.dir = dir;
+	data.mass = mass;
+	data.planetCount = planetCount;
+	data.elapsedTime = elapsedTime;
+	data.simSpeed = simSpeed;
+
+	return data;
+}
+
+struct Planet
+{
+
+};
 
  void Gravity(
  	__global float2 * out_dir1,
@@ -68,16 +79,15 @@ __kernel void Calculate(
 	__local int * in_matrix,
 	int steps,
 	int cores,
-	__global float2 * pos,
-	__global float2 * dir,
-	__global float * mass,
+	__local float2 * pos,
+	__local float2 * dir,
+	__local float * mass,
 	int planetCount,
 	float elapsedTime,
 	float simSpeed)
 {
-	struct RRTMatrix matrix = SetRRTMatrix(in_matrix, steps, cores);
-	
-	//SetPlanetData(pos, dir, mass, planetCount, elapsedTime, simSpeed);
+	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
+	struct PlanetData data = CreatePlanetData(pos, dir, mass, planetCount, elapsedTime, simSpeed);
 
 	// calculation magic here
 }
