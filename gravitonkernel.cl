@@ -1,56 +1,5 @@
-﻿struct RRTMatrix
-{
-	__local int * _rrtMatrix;
-	int _steps;
-	int _cores;
-};
-
-struct RRTMatrix CreateRRTMatrix(
-	__local int * in_matrix,
-	int steps,
-	int cores)
-{
-	struct RRTMatrix matrix;
-	matrix._rrtMatrix = in_matrix;
-	matrix._steps = steps;
-	matrix._cores = cores;
-
-	return matrix;
-}
-
-struct PlanetData
-{
-	__local float2 * pos;
-	__local float2 * dir;
-	__local float * mass;
-	int planetCount;
-	float elapsedTime;
-	float simSpeed;
-};
-
-struct PlanetData CreatePlanetData(
-	__local float2 * pos,
-	__local float2 * dir,
-	__local float * mass,
-	int planetCount,
-	float elapsedTime,
-	float simSpeed)
-{
-	struct PlanetData data;
-	data.pos = pos;
-	data.dir = dir;
-	data.mass = mass;
-	data.planetCount = planetCount;
-	data.elapsedTime = elapsedTime;
-	data.simSpeed = simSpeed;
-
-	return data;
-}
-
-struct Planet
-{
-
-};
+﻿#include "RTTMatrix.cl"
+#include "Planet.cl"
 
  void Gravity(
  	__global float2 * out_dir1,
