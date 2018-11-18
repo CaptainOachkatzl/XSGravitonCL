@@ -1,17 +1,17 @@
 struct PlanetData
 {
-	__local float2 * pos;
-	__local float2 * dir;
-	__local float * mass;
+	__constant float2 * pos;
+	__global float2 * dir;
+	__constant float * mass;
 	int planetCount;
 	float elapsedTime;
 	float simSpeed;
 };
 
 struct PlanetData CreatePlanetData(
-	__local float2 * pos,
-	__local float2 * dir,
-	__local float * mass,
+	__constant float2 * pos,
+	__global float2 * dir,
+	__constant float * mass,
 	int planetCount,
 	float elapsedTime,
 	float simSpeed)

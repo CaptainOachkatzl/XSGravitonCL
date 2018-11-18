@@ -26,12 +26,12 @@
  }
 
 __kernel void Calculate(
-	__local int * in_matrix,
+	__constant int * in_matrix,
 	int steps,
 	int cores,
-	__local float2 * pos,
-	__local float2 * dir,
-	__local float * mass,
+	__constant float2 * pos,
+	__global float2 * dir,
+	__constant float * mass,
 	int planetCount,
 	float elapsedTime,
 	float simSpeed)
@@ -41,6 +41,8 @@ __kernel void Calculate(
 
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
 	struct PlanetData data = CreatePlanetData(pos, dir, mass, planetCount, elapsedTime, simSpeed);
+
+	printf("test");
 
 	// calculation magic here
 }
