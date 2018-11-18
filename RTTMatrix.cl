@@ -1,8 +1,8 @@
 struct RRTMatrix
 {
-	__local int * _rrtMatrix;
-	int _steps;
-	int _cores;
+	__local int * rrtMatrix;
+	int steps;
+	int cores;
 };
 
 
@@ -12,9 +12,9 @@ struct RRTMatrix CreateRRTMatrix(
 	int cores)
 {
 	struct RRTMatrix matrix;
-	matrix._rrtMatrix = in_matrix;
-	matrix._steps = steps;
-	matrix._cores = cores;
+	matrix.rrtMatrix = in_matrix;
+	matrix.steps = steps;
+	matrix.cores = cores;
 
 	return matrix;
 }

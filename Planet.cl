@@ -1,5 +1,3 @@
-
-
 struct PlanetData
 {
 	__local float2 * pos;
