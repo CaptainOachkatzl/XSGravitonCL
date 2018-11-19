@@ -1,4 +1,4 @@
-﻿#include "RTTMatrix.cl"
+#include "RTTMatrix.cl"
 #include "Stack.cl"
 
 
@@ -37,25 +37,29 @@ __kernel void Calculate(
 	uchar heapStart[512];
 	struct Heap heap = Heap_ctor(heapStart);
 
+	uint threadID = get_local_id(0);
+
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
 
-	struct Planet planet = PlanetFromIndexedData(planetData, 0);
+	struct Planet planet = PlanetFromIndexedData(planetData, threadID);
 	planet.pos->x = 1;
 	planet.pos->y = 2;
 	planet.dir->x = 3;
 	planet.dir->y = 4;
-	*planet.mass = 0;
+	*planet.mass = 5;
 
-	heapStart[0] = 112;
+	// heapStart[0] = 112;
 
-	planet.pos->x = (float)(int)heapStart;
-	planet.pos->y = (float)(int)heap.start;
-	planet.dir->x = (float)heapStart[0];
-	planet.dir->y = (float)*heap.start;
+	// planet.pos->x = (float)(int)heapStart;
+	// planet.pos->y = (float)(int)heap.start;
+	// planet.dir->x = (float)heapStart[0];
+	// planet.dir->y = (float)*heap.start;
 
-	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
+	// struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 
-	*planet.mass = (float)rrtStacks.stacks[0].size;
+	// *planet.mass = (float)rrtStacks.stacks[0].size;
+
+	// *planet.mass = (float)(int)get_group_id(0);
 
 	// calculation magic here
 }
