@@ -18,3 +18,8 @@ struct RRTMatrix CreateRRTMatrix(
 
 	return matrix;
 }
+
+int GetElementIndex(struct RRTMatrix matrix, int step, int core, int id)
+{
+	return matrix.rrtMatrix[(step * matrix.cores) + (core * 2) + id];
+}
