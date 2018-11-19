@@ -1,26 +1,39 @@
- #include "RRTMatrix.cl"
- #include "Planet.cl"
- #include "Stack.cl"
- 
- void Gravity(
- 	__global float2 * out_dir1,
- 	__global float2 * out_dir2,
- 	__constant float2 * pos1, float mass1,
- 	__constant float2 * pos2, float mass2,
- 	float simSpeed, float elapsedTime)
- {
- 	float2 directionVec = *pos2 - *pos1;
+#include "RRTMatrix.cl"
+#include "Planet.cl"
+#include "Stack.cl"
 
- 	float dis = length(directionVec);
- 	if (!dis)
- 		return;
+struct GlobalData
+{
+    __global float * planetData;
+    int planetCount;
+    float simSpeed;
+    float elapsedTime;
+};
 
- 	dis = dis * dis;
+void Gravity(
+    __global float2 * out_dir1,
+    __global float2 * out_dir2,
+    __constant float2 * pos1, float mass1,
+    __constant float2 * pos2, float mass2,
+    float simSpeed, float elapsedTime)
+{
+    float2 directionVec = *pos2 - *pos1;
 
- 	float acceleration = 0.0000000000000000667408F * simSpeed / dis * elapsedTime;
+    float dis = length(directionVec);
+    if (!dis)
+        return;
 
- 	directionVec = normalize(directionVec) * acceleration;
+    dis = dis * dis;
 
- 	(*out_dir1) += (directionVec * mass2);
- 	(*out_dir2) -= (directionVec * mass1);
- }
+    float acceleration = 0.0000000000000000667408F * simSpeed / dis * elapsedTime;
+
+    directionVec = normalize(directionVec) * acceleration;
+
+    (*out_dir1) += (directionVec * mass2);
+    (*out_dir2) -= (directionVec * mass1);
+}
+
+void CalculateInternally(uint threadID, struct RRTMatrix matrix, struct RRTStacks stacks)
+{
+
+}
