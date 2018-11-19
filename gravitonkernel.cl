@@ -10,7 +10,7 @@ __kernel void Calculate(
 	float simSpeed)
 {
 	// initialize heap
-	uchar heapStart[512];
+	uchar heapStart[1024];
 	struct Heap heap = Heap_ctor(heapStart);
 
 	// create data structures
