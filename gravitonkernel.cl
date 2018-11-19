@@ -11,17 +11,25 @@ __kernel void Calculate(
 {
 	uchar heapStart[512];
 	struct Heap heap = Heap_ctor(heapStart);
-
-	uint threadID = get_local_id(0);
-
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
 
-	struct Planet planet = PlanetFromIndexedData(planetData, threadID);
-	planet.pos->x = 1;
-	planet.pos->y = 2;
-	planet.dir->x = 3;
-	planet.dir->y = 4;
-	*planet.mass = 5;
+	struct GlobalData globalData;
+	globalData.threadID = get_local_id(0);
+	globalData.planetData = planetData;
+	globalData.planetCount = planetCount;
+	globalData.simSpeed = simSpeed;
+	globalData.elapsedTime = elapsedTime;
+
+	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
+
+	CalculateInternally(globalData, rrtStacks.stacks[0]);
+
+	// struct Planet planet = PlanetFromIndexedData(planetData, threadID);
+	// planet.pos->x = 1;
+	// planet.pos->y = 2;
+	// planet.dir->x = 3;
+	// planet.dir->y = 4;
+	// *planet.mass = 5;
 
 	// heapStart[0] = 112;
 
@@ -30,7 +38,7 @@ __kernel void Calculate(
 	// planet.dir->x = (float)heapStart[0];
 	// planet.dir->y = (float)*heap.start;
 
-	// struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
+	// 
 
 	// *planet.mass = (float)rrtStacks.stacks[0].size;
 
