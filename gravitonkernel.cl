@@ -38,32 +38,24 @@ __kernel void Calculate(
 	struct Heap heap = Heap_ctor(heapStart);
 
 	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
-	 // Planet_ctor((__global float2 *)&planetData[0], (__global float2 *)&planetData[2], &planetData[4]);
-	//struct Planet planet2 = PlanetFromIndexedData(planetData, 1);
 
-	//planetData[9] = 3.5;
+	struct Planet planet = PlanetFromIndexedData(planetData, 0);
+	planet.pos->x = 1;
+	planet.pos->y = 2;
+	planet.dir->x = 3;
+	planet.dir->y = 4;
+	*planet.mass = 0;
 
-		struct Planet planet = PlanetFromIndexedData(planetData, 1);
-		planet.pos->x = 1;
-		// planet.pos->y = 1;
-		// planet.dir->x = 1;
-		// planet.dir->y = 1;
-		// *planet.mass = 1;
+	heapStart[0] = 112;
 
-	// for(int i = 0; i < planetCount; i++)
-	// {
-	// 	struct Planet planet = PlanetFromIndexedData(planetData, i);
-	// 	planet.pos->x = i;
-	// 	planet.pos->y = i;
-	// 	planet.dir->x = i;
-	// 	planet.dir->y = i;
-	// 	*planet.mass = i;
-	// }
-		
-	// planetData[0] = 2;
+	planet.pos->x = (float)(int)heapStart;
+	planet.pos->y = (float)(int)heap.start;
+	planet.dir->x = (float)heapStart[0];
+	planet.dir->y = (float)*heap.start;
 
-	// planet1.pos->y = 0.5;
-	// planet2.pos->x = 3.5;
+	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
+
+	*planet.mass = (float)rrtStacks.stacks[0].size;
 
 	// calculation magic here
 }
