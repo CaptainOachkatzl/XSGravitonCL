@@ -71,10 +71,17 @@ void CalculateStackPair(struct GlobalData data, struct Stack stack1, struct Stac
     }
 }
 
+void Synchronize()
+{
+    // todo
+}
+
 void DistributeCalculations(struct GlobalData data, struct RRTMatrix matrix, struct RRTStacks stacks)
 {
     for(int i = 0; i < stacks.count; i++)
         CalculateInternally(data, stacks.stacks[i]);
+
+    Synchronize();
 
     for(int step = 0; step < matrix.steps; step++)
     {
@@ -82,5 +89,7 @@ void DistributeCalculations(struct GlobalData data, struct RRTMatrix matrix, str
         struct Stack stack2 = stacks.stacks[GetElementIndex(matrix, step, data.threadID, 1)];
 
         CalculateStackPair(data, stack1, stack2);
+
+        Synchronize();
     }
 }
