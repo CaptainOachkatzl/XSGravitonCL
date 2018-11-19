@@ -9,18 +9,15 @@ __kernel void Calculate(
 	float elapsedTime,
 	float simSpeed)
 {
+	// initialize heap
 	uchar heapStart[512];
 	struct Heap heap = Heap_ctor(heapStart);
-	struct RRTMatrix matrix = CreateRRTMatrix(in_matrix, steps, cores);
 
-	struct GlobalData globalData;
-	globalData.threadID = get_local_id(0);
-	globalData.planetData = planetData;
-	globalData.planetCount = planetCount;
-	globalData.simSpeed = simSpeed;
-	globalData.elapsedTime = elapsedTime;
-
+	// create data structures
+	struct GlobalData globalData = GlobalData_ctor(get_local_id(0), planetData, planetCount, simSpeed, elapsedTime);
+	struct RRTMatrix matrix = RRTMatrix_ctor(in_matrix, steps, cores);
 	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 
-	DistributeCalculations(globalData, matrix, rrtStacks);
+	// do the calculations
+	DistributeCalculations(&globalData, &matrix, &rrtStacks);
 }

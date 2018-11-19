@@ -6,7 +6,7 @@ struct RRTMatrix
 };
 
 
-struct RRTMatrix CreateRRTMatrix(
+struct RRTMatrix RRTMatrix_ctor(
 	__constant int * in_matrix,
 	int steps,
 	int cores)
@@ -19,7 +19,7 @@ struct RRTMatrix CreateRRTMatrix(
 	return matrix;
 }
 
-int GetElementIndex(struct RRTMatrix matrix, int step, int core, int id)
+int GetElementIndex(struct RRTMatrix * matrix, int step, int core, int id)
 {
-	return matrix.rrtMatrix[(step * matrix.cores) + (core * 2) + id];
+	return matrix->rrtMatrix[(step * matrix->cores) + (core * 2) + id];
 }

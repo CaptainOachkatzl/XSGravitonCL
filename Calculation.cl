@@ -11,6 +11,23 @@ struct GlobalData
     float elapsedTime;
 };
 
+struct GlobalData GlobalData_ctor(
+    uint threadID,
+    __global float * planetData,
+    int planetCount,
+    float simSpeed,
+    float elapsedTime)
+{
+    struct GlobalData globalData;
+	globalData.threadID = threadID;
+	globalData.planetData = planetData;
+	globalData.planetCount = planetCount;
+	globalData.simSpeed = simSpeed;
+	globalData.elapsedTime = elapsedTime;
+
+    return globalData;
+}
+
 void Gravity(
     __global float2 * out_dir1,
     __global float2 * pos1,
@@ -37,20 +54,20 @@ void Gravity(
     (*out_dir2) -= (directionVec * mass1);
 }
 
-void CalculatePair(struct GlobalData data, int i, int j)
+void CalculatePair(struct GlobalData * data, int i, int j)
 {
     Gravity(
-        GetDirection(data.planetData, i),
-        GetPosition(data.planetData, i),
-        *GetMass(data.planetData, i),
-        GetDirection(data.planetData, j),
-        GetPosition(data.planetData, j),
-        *GetMass(data.planetData, j),
-        data.simSpeed,
-        data.elapsedTime);
+        GetDirection(data->planetData, i),
+        GetPosition(data->planetData, i),
+        *GetMass(data->planetData, i),
+        GetDirection(data->planetData, j),
+        GetPosition(data->planetData, j),
+        *GetMass(data->planetData, j),
+        data->simSpeed,
+        data->elapsedTime);
 }
 
-void CalculateInternally(struct GlobalData data, struct Stack stack)
+void CalculateInternally(struct GlobalData * data, struct Stack stack)
 {
     if(stack.size < 2)
         return;
@@ -62,7 +79,7 @@ void CalculateInternally(struct GlobalData data, struct Stack stack)
     }
 }
 
-void CalculateStackPair(struct GlobalData data, struct Stack stack1, struct Stack stack2)
+void CalculateStackPair(struct GlobalData * data, struct Stack stack1, struct Stack stack2)
 {
     for(int i = 0; i < stack1.size; i++)
     {
@@ -76,17 +93,17 @@ void Synchronize()
     // todo
 }
 
-void DistributeCalculations(struct GlobalData data, struct RRTMatrix matrix, struct RRTStacks stacks)
+void DistributeCalculations(struct GlobalData * data, struct RRTMatrix * matrix, struct RRTStacks * stacks)
 {
-    for(int i = 0; i < stacks.count; i++)
-        CalculateInternally(data, stacks.stacks[i]);
+    for(int i = 0; i < stacks->count; i++)
+        CalculateInternally(data, stacks->stacks[i]);
 
-    for(int step = 0; step < matrix.steps; step++)
+    for(int step = 0; step < matrix->steps; step++)
     {
         Synchronize();
 
-        struct Stack stack1 = stacks.stacks[GetElementIndex(matrix, step, data.threadID, 0)];
-        struct Stack stack2 = stacks.stacks[GetElementIndex(matrix, step, data.threadID, 1)];
+        struct Stack stack1 = stacks->stacks[GetElementIndex(matrix, step, data->threadID, 0)];
+        struct Stack stack2 = stacks->stacks[GetElementIndex(matrix, step, data->threadID, 1)];
 
         CalculateStackPair(data, stack1, stack2);
     }
