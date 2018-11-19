@@ -1,3 +1,5 @@
+#define PLANET_DATA_SIZE 6 // this should be 5 but data allignment is a b*tch
+
 struct Planet
 {
 	__global float2 * pos;
@@ -18,12 +20,27 @@ struct Planet Planet_ctor(
 	return data;
 }
 
+__global float2 * GetPosition(__global float * planetData, int index)
+{
+	return (__global float2 *) &planetData[index * PLANET_DATA_SIZE];
+}
+
+__global float2 * GetDirection(__global float * planetData, int index)
+{
+	return (__global float2 *) &planetData[(index * PLANET_DATA_SIZE) + 2];
+}
+
+__global float * GetMass(__global float * planetData, int index)
+{
+	return (__global float *) &planetData[(index * PLANET_DATA_SIZE) + 4];
+}
+
 struct Planet PlanetFromIndexedData(__global float * planetData, int index)
 {
 	struct Planet data;
-	data.pos = (__global float2 *) &planetData[index * 5];
-	data.dir = (__global float2 *) &planetData[(index * 5) + 2];
-	data.mass = &planetData[(index * 5) + 4];
+	data.pos = GetPosition(planetData, index);
+	data.dir = GetDirection(planetData, index);
+	data.mass = GetMass(planetData, index);
 
 	return data;
 }
