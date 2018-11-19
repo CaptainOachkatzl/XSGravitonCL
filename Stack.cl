@@ -1,4 +1,3 @@
-#include "Planet.cl"
 #include "Heap.cl"
 
 struct Stack

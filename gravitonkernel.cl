@@ -1,6 +1,4 @@
-﻿#include "RTTMatrix.cl"
-#include "Stack.cl"
-#include "Calculation.cl"
+﻿#include "Calculation.cl"
 
 __kernel void Calculate(
 	__constant int * in_matrix,

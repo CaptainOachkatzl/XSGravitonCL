@@ -1,3 +1,7 @@
+ #include "RTTMatrix.cl"
+ #include "Planet.cl"
+ #include "Stack.cl"
+ 
  void Gravity(
  	__global float2 * out_dir1,
  	__global float2 * out_dir2,
