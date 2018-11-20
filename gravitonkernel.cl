@@ -18,6 +18,8 @@ __kernel void Calculate(
 	struct RRTMatrix matrix = RRTMatrix_ctor(in_matrix, steps, cores);
 	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 
-	// do the calculations
+	// do the gravity calculations
 	DistributeCalculations(&globalData, &matrix, &rrtStacks, GRAVITY_FUNCTION_ID);
+	// do the collision calculations
+	DistributeCalculations(&globalData, &matrix, &rrtStacks, COLLISION_FUNCTION_ID);
 }

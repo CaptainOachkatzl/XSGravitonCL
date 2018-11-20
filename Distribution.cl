@@ -1,5 +1,4 @@
 #include "Gravity.cl"
-#include "Collision.cl"
 #include "RRTMatrix.cl"
 #include "Stack.cl"
 
@@ -7,6 +6,9 @@ void ExecuteFunction(struct GlobalData * data, int i, int j, int functionID)
 {
     if(functionID == GRAVITY_FUNCTION_ID)
         CalculatePairGravity(data, i, j);
+    else if (functionID == COLLISION_FUNCTION_ID)
+        CalculatePairCollision(data, i, j);
+
 }
 
 void CalculateInternally(struct GlobalData * data, struct Stack stack, int functionID)

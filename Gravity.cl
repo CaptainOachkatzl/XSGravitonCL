@@ -1,5 +1,4 @@
-#include "Planet.cl"
-#include "GlobalData.cl"
+#include "Collision.cl"
 
 #define GRAVITY_FUNCTION_ID 0
 
