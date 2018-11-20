@@ -1,4 +1,5 @@
 #include "Gravity.cl"
+#include "Collision.cl"
 #include "RRTMatrix.cl"
 #include "Stack.cl"
 
