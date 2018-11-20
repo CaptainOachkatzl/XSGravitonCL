@@ -1,4 +1,4 @@
-﻿#include "Calculation.cl"
+﻿#include "Distribution.cl"
 
 __kernel void Calculate(
 	__constant int * in_matrix,
