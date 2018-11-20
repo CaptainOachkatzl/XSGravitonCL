@@ -1,13 +1,20 @@
 ﻿#include "Distribution.cl"
 
-void ApplyAcceleration(struct GlobalData * data)
+void ApplyStackAcceleration(struct GlobalData * data, struct Stack * stack)
 {
-	for(int i = 0; i < data->planetCount; i++)
+	for(int i = 0; i < stack->size; i++)
 	{
-		__global float2 * pos = GetPosition(data->planetData, i);
-		float2 nextFrame = GetDirectionNextFrame(data, i);
+		int planetID = i + stack->offset;
+		__global float2 * pos = GetPosition(data->planetData, planetID);
+		float2 nextFrame = GetDirectionNextFrame(data, planetID);
 		*pos += nextFrame;
 	}
+}
+
+void ApplyAcceleration(struct GlobalData * data, struct RRTStacks * rrtStacks)
+{
+	ApplyStackAcceleration(data, &rrtStacks->stacks[data->threadID]);
+	ApplyStackAcceleration(data, &rrtStacks->stacks[data->threadID + (rrtStacks->count / 2)]);
 }
 
 __kernel void Calculate(
@@ -17,15 +24,14 @@ __kernel void Calculate(
 	__global float * planetData,
 	int planetCount,
 	float elapsedTime,
-	float simSpeed,
-	__global int * debugCounter)
+	float simSpeed)
 {
 	// initialize heap
 	uchar heapStart[1024];
 	struct Heap heap = Heap_ctor(heapStart);
 
 	// create data structures
-	struct GlobalData globalData = GlobalData_ctor(get_local_id(0), planetData, planetCount, simSpeed, elapsedTime, debugCounter);
+	struct GlobalData globalData = GlobalData_ctor(get_local_id(0), planetData, planetCount, simSpeed, elapsedTime);
 	struct RRTMatrix matrix = RRTMatrix_ctor(in_matrix, steps, cores);
 	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 
@@ -34,8 +40,5 @@ __kernel void Calculate(
 	// do the collision calculations
 	DistributeCalculations(&globalData, &matrix, &rrtStacks, COLLISION_FUNCTION_ID);
 
-	if(globalData.threadID == 0)
-	{
-		ApplyAcceleration(&globalData);
-	}
+	ApplyAcceleration(&globalData, &rrtStacks);
 }
