@@ -10,7 +10,7 @@
             "command": "ioc64",
             "args": [
                 "-cmd=compile",
-                "-input=\"c:\\Users\\Dave\\Documents\\Visual Studio 2017\\Projects\\VS Code\\Graviton\\gravitonkernel.cl\""
+                "-input=\"${workspaceFolder}\\gravitonkernel.cl\""
             ],
             "problemMatcher": [
                 "$ioc"
