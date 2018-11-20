@@ -19,5 +19,5 @@ __kernel void Calculate(
 	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 
 	// do the calculations
-	DistributeCalculations(&globalData, &matrix, &rrtStacks);
+	DistributeCalculations(&globalData, &matrix, &rrtStacks, GRAVITY_FUNCTION_ID);
 }

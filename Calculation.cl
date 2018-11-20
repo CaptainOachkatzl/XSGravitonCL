@@ -1,6 +1,8 @@
 #include "Planet.cl"
 #include "GlobalData.cl"
 
+#define GRAVITY_FUNCTION_ID 0
+
 void Gravity(
     __global float2 * out_dir1,
     __global float2 * pos1,
