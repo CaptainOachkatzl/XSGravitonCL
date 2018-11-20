@@ -21,5 +21,5 @@ struct RRTMatrix RRTMatrix_ctor(
 
 int GetElementIndex(struct RRTMatrix * matrix, int step, int core, int id)
 {
-	return matrix->rrtMatrix[(step * matrix->cores) + (core * 2) + id];
+	return matrix->rrtMatrix[(step * matrix->cores * 2) + (core * 2) + id];
 }
