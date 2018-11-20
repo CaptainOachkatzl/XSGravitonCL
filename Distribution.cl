@@ -1,4 +1,4 @@
-#include "Calculation.cl"
+#include "Gravity.cl"
 #include "RRTMatrix.cl"
 #include "Stack.cl"
 
