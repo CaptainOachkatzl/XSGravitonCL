@@ -1,4 +1,6 @@
-#define PLANET_DATA_SIZE 6 // this should be 5 but data allignment is a b*tch
+#include "GlobalData.cl"
+
+#define PLANET_DATA_SIZE 6
 
 struct Planet
 {
@@ -47,7 +49,6 @@ float2 GetDirectionNextFrame(struct GlobalData * data, int index)
 {
     return (*GetDirection(data->planetData, index)) * data->simSpeed * data->elapsedTime;
 }
-
 
 struct Planet PlanetFromIndexedData(__global float * planetData, int index)
 {

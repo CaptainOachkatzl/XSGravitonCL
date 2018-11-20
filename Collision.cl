@@ -1,5 +1,4 @@
 #include "Planet.cl"
-#include "GlobalData.cl"
 
 #define COLLISION_FUNCTION_ID 1
 
