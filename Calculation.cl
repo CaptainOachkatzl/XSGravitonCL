@@ -65,7 +65,7 @@ void CalculateStackPair(struct GlobalData * data, struct Stack stack1, struct St
 
 void Synchronize()
 {
-    // todo
+    barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 void DistributeCalculations(struct GlobalData * data, struct RRTMatrix * matrix, struct RRTStacks * stacks)
