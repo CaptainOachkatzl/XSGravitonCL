@@ -1,5 +1,6 @@
 struct GlobalData
 {
+    int debugCounter;
     uint threadID;
     __global float * planetData;
     int planetCount;
@@ -15,6 +16,7 @@ struct GlobalData GlobalData_ctor(
     float elapsedTime)
 {
     struct GlobalData globalData;
+    globalData.debugCounter = 0;
 	globalData.threadID = threadID;
 	globalData.planetData = planetData;
 	globalData.planetCount = planetCount;
@@ -22,4 +24,9 @@ struct GlobalData GlobalData_ctor(
 	globalData.elapsedTime = elapsedTime;
 
     return globalData;
+}
+
+void Debug(struct GlobalData * data, float value)
+{
+    data->planetData[data->debugCounter++] = value;
 }
