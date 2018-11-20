@@ -1,4 +1,14 @@
-#include "Distribution.cl"
+﻿#include "Distribution.cl"
+
+void ApplyAcceleration(struct GlobalData * data)
+{
+	for(int i = 0; i < data->planetCount; i++)
+	{
+		__global float2 * pos = GetPosition(data->planetData, i);
+		float2 nextFrame = GetDirectionNextFrame(data, i);
+		*pos += nextFrame;
+	}
+}
 
 __kernel void Calculate(
 	__constant int * in_matrix,
@@ -23,4 +33,9 @@ __kernel void Calculate(
 	DistributeCalculations(&globalData, &matrix, &rrtStacks, GRAVITY_FUNCTION_ID);
 	// do the collision calculations
 	DistributeCalculations(&globalData, &matrix, &rrtStacks, COLLISION_FUNCTION_ID);
+
+	if(globalData.threadID == 0)
+	{
+		ApplyAcceleration(&globalData);
+	}
 }
