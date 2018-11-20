@@ -51,4 +51,6 @@ void DistributeCalculations(struct GlobalData * data, struct RRTMatrix * matrix,
 
         CalculateStackPair(data, stack1, stack2, functionID);
     }
+
+    Synchronize();
 }
