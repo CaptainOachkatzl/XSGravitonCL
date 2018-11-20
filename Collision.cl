@@ -3,11 +3,6 @@
 
 #define COLLISION_FUNCTION_ID 1
 
-float2 GetDirectionNextFrame(struct GlobalData * data, int planetID)
-{
-    return *GetDirection(data->planetData, planetID) * data->simSpeed * data->elapsedTime;
-}
-
 bool IsColliding(struct GlobalData * data, int planet1, int planet2, float2 * out_distanceVector)
 {
     *out_distanceVector = *GetPosition(data->planetData, planet2) - *GetPosition(data->planetData, planet1);

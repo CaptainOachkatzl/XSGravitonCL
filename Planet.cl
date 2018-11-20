@@ -43,6 +43,12 @@ __global float * GetRadius(__global float * planetData, int index)
 	return (__global float *) &planetData[(index * PLANET_DATA_SIZE) + 5];
 }
 
+float2 GetDirectionNextFrame(struct GlobalData * data, int index)
+{
+    return (*GetDirection(data->planetData, index)) * data->simSpeed * data->elapsedTime;
+}
+
+
 struct Planet PlanetFromIndexedData(__global float * planetData, int index)
 {
 	struct Planet data;
