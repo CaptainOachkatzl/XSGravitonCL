@@ -1,4 +1,4 @@
-﻿#include "Distribution.cl"
+#include "Distribution.cl"
 
 __kernel void Calculate(
 	__constant int * in_matrix,
@@ -7,14 +7,15 @@ __kernel void Calculate(
 	__global float * planetData,
 	int planetCount,
 	float elapsedTime,
-	float simSpeed)
+	float simSpeed,
+	__global int * debugCounter)
 {
 	// initialize heap
 	uchar heapStart[1024];
 	struct Heap heap = Heap_ctor(heapStart);
 
 	// create data structures
-	struct GlobalData globalData = GlobalData_ctor(get_local_id(0), planetData, planetCount, simSpeed, elapsedTime);
+	struct GlobalData globalData = GlobalData_ctor(get_local_id(0), planetData, planetCount, simSpeed, elapsedTime, debugCounter);
 	struct RRTMatrix matrix = RRTMatrix_ctor(in_matrix, steps, cores);
 	struct RRTStacks rrtStacks = SplitPlanetsIntoStacks(&heap, planetCount, cores);
 

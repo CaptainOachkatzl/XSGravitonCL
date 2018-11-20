@@ -1,11 +1,11 @@
 struct GlobalData
 {
-    int debugCounter;
     uint threadID;
     __global float * planetData;
     int planetCount;
     float simSpeed;
     float elapsedTime;
+    __global int * debugCounter;
 };
 
 struct GlobalData GlobalData_ctor(
@@ -13,20 +13,21 @@ struct GlobalData GlobalData_ctor(
     __global float * planetData,
     int planetCount,
     float simSpeed,
-    float elapsedTime)
+    float elapsedTime,
+    __global int * debugCounter)
 {
     struct GlobalData globalData;
-    globalData.debugCounter = 0;
 	globalData.threadID = threadID;
 	globalData.planetData = planetData;
 	globalData.planetCount = planetCount;
 	globalData.simSpeed = simSpeed;
 	globalData.elapsedTime = elapsedTime;
+    globalData.debugCounter = debugCounter;
 
     return globalData;
 }
 
 void Debug(struct GlobalData * data, float value)
 {
-    data->planetData[data->debugCounter++] = value;
+    data->planetData[atomic_inc(data->debugCounter)] = value;
 }
