@@ -1,13 +1,13 @@
 struct RRTMatrix
 {
-	__constant int * rrtMatrix;
+	__local int * rrtMatrix;
 	int steps;
 	int cores;
 };
 
 
 struct RRTMatrix RRTMatrix_ctor(
-	__constant int * in_matrix,
+	__local int * in_matrix,
 	int steps,
 	int cores)
 {

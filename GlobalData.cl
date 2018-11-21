@@ -1,7 +1,7 @@
 struct GlobalData
 {
     uint threadID;
-    __global float * planetData;
+    __local float * planetData;
     int planetCount;
     float simSpeed;
     float elapsedTime;
@@ -9,7 +9,7 @@ struct GlobalData
 
 struct GlobalData GlobalData_ctor(
     uint threadID,
-    __global float * planetData,
+    __local float * planetData,
     int planetCount,
     float simSpeed,
     float elapsedTime)

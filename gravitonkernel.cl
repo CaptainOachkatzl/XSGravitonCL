@@ -5,7 +5,7 @@ void ApplyStackAcceleration(struct GlobalData * data, struct Stack * stack)
 	for(int i = 0; i < stack->size; i++)
 	{
 		int planetID = i + stack->offset;
-		__global float2 * pos = GetPosition(data->planetData, planetID);
+		__local float2 * pos = GetPosition(data->planetData, planetID);
 		float2 nextFrame = GetDirectionNextFrame(data, planetID);
 		*pos += nextFrame;
 	}
@@ -18,10 +18,10 @@ void ApplyAcceleration(struct GlobalData * data, struct RRTStacks * rrtStacks)
 }
 
 __kernel void Calculate(
-	__constant int * in_matrix,
+	__local int * in_matrix,
 	int steps,
 	int cores,
-	__global float * planetData,
+	__local float * planetData,
 	int planetCount,
 	float elapsedTime,
 	float simSpeed)

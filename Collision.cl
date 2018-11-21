@@ -18,8 +18,8 @@ bool IsColliding(struct GlobalData * data, int planet1, int planet2, float2 * ou
 
 void CalculateCollisionReaction(struct GlobalData * data, int planet1, int planet2, float2 distanceVector)
 {
-    __global float2 * dir1 = GetDirection(data->planetData, planet1);
-    __global float2 * dir2 = GetDirection(data->planetData, planet2);
+    __local float2 * dir1 = GetDirection(data->planetData, planet1);
+    __local float2 * dir2 = GetDirection(data->planetData, planet2);
     // Source http://www.gamasutra.com/view/feature/131424/pool_hall_lessons_fast_accurate_.php?page=3
 
     // First, find the normalized vector n from the center of 
