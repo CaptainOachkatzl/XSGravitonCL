@@ -24,7 +24,24 @@ struct GlobalData GlobalData_ctor(
     return globalData;
 }
 
-void Debug(struct GlobalData * data, float value)
+struct ProgramData
+{
+    int debugCounter;
+    int threadID;
+    int workgroupSize;
+};
+
+struct ProgramData ProgramData_ctor(int threadID, int workgroupSize)
+{
+    struct ProgramData data;
+    data.debugCounter = 0;
+    data.threadID = threadID;
+    data.workgroupSize = workgroupSize;
+
+    return data;
+}
+{
+void Debug(__global float * output, int * debugCounter, float value)
 {
     //data->planetData[atomic_inc(data->debugCounter)] = value;
 }
