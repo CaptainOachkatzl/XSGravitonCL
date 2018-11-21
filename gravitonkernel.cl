@@ -34,25 +34,9 @@ __kernel void Calculate(
 
 	struct ProgramData programData = ProgramData_ctor(get_local_id(0), get_local_size(0));
 
-	programData.debugOutput = global_planetData;
-
-	if(programData.threadID == 0)
-	{
-		for(int i = 0; i < (steps * cores * 2); i++)
-			matrix[i] = in_matrix[i];
-
-		for(int i = 0; i < planetCount * PLANET_DATA_SIZE; i++)
-			planetData[i] = global_planetData[i];
-	}
-
+	CopyPlanetDataToLocal(programData.threadID, programData.workgroupSize, global_planetData, planetData, 0, planetCount * PLANET_DATA_SIZE);
+	CopyMatrixToLocal(programData.threadID, programData.workgroupSize, in_matrix, matrix, 0, steps * cores * 2);
 	Synchronize();
-	// CopyPlanetDataToLocal(programData.threadID, programData.workgroupSize, global_planetData, planetData, 0, planetCount * PLANET_DATA_SIZE);
-	// CopyMatrixToLocal(programData.threadID, programData.workgroupSize, in_matrix, matrix, 0, steps * cores * 2);
-
-	// Debug(&programData, steps * cores * 2);
-	// Debug(&programData, planetCount * PLANET_DATA_SIZE);
-	// Debug(global_planetData, &debugCounter, programData.threadID);
-	// Debug(global_planetData, &debugCounter, programData.workgroupSize);
 
 	// create data structures
 	struct GlobalData globalData = GlobalData_ctor(planetData, planetCount, simSpeed, elapsedTime);
@@ -66,15 +50,5 @@ __kernel void Calculate(
 
 	ApplyAcceleration(&programData, &globalData, &rrtStacks);
 
-	//CopyToOutput(programData.threadID, programData.workgroupSize, planetData, global_planetData, planetCount * PLANET_DATA_SIZE);
-
-	
-	if(programData.threadID == 0)
-	{
-		for(int i = 0; i < planetCount * PLANET_DATA_SIZE; i++)
-			global_planetData[i] = planetData[i];
-	}
-
-	// for(int i = 0; i < (steps * cores * 2); i++)
-	// 	global_planetData[i] = matrix[i];
+	CopyToOutput(programData.threadID, programData.workgroupSize, planetData, global_planetData, planetCount * PLANET_DATA_SIZE);
 }
