@@ -1,7 +1,5 @@
 #include "GlobalData.cl"
 
-#define PLANET_DATA_SIZE 6
-
 struct Planet
 {
 	__local float2 * pos;

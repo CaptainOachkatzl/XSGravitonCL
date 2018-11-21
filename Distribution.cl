@@ -8,7 +8,6 @@ void ExecuteFunction(struct GlobalData * data, int i, int j, int functionID)
         CalculatePairGravity(data, i, j);
     else if (functionID == COLLISION_FUNCTION_ID)
         CalculatePairCollision(data, i, j);
-
 }
 
 void CalculateInternally(struct GlobalData * data, struct Stack stack, int functionID)
@@ -37,7 +36,7 @@ void Synchronize()
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
-void DistributeCalculations(struct GlobalData * data, struct RRTMatrix * matrix, struct RRTStacks * stacks, int functionID)
+void DistributeCalculations(struct ProgramData * programData, struct GlobalData * data, struct RRTMatrix * matrix, struct RRTStacks * stacks, int functionID)
 {
     for(int i = 0; i < stacks->count; i++)
         CalculateInternally(data, stacks->stacks[i], functionID);
@@ -46,8 +45,8 @@ void DistributeCalculations(struct GlobalData * data, struct RRTMatrix * matrix,
     {
         Synchronize();
 
-        struct Stack stack1 = stacks->stacks[GetElementIndex(matrix, step, data->threadID, 0)];
-        struct Stack stack2 = stacks->stacks[GetElementIndex(matrix, step, data->threadID, 1)];
+        struct Stack stack1 = stacks->stacks[GetElementIndex(matrix, step, programData->threadID, 0)];
+        struct Stack stack2 = stacks->stacks[GetElementIndex(matrix, step, programData->threadID, 1)];
 
         CalculateStackPair(data, stack1, stack2, functionID);
     }
