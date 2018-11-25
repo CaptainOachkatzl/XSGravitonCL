@@ -3,11 +3,11 @@
 #define GRAVITY_FUNCTION_ID 0
 
 void Gravity(
-    __local float2 * out_dir1,
-    __local float2 * pos1,
+    __global float2 * out_dir1,
+    __global float2 * pos1,
     float mass1,
-    __local float2 * out_dir2,
-    __local float2 * pos2, 
+    __global float2 * out_dir2,
+    __global float2 * pos2, 
     float mass2,
     float simSpeed, 
     float elapsedTime)

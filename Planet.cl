@@ -2,17 +2,17 @@
 
 struct Planet
 {
-	__local float2 * pos;
-	__local float2 * dir;
-	__local float * mass;
-	__local float * radius;
+	__global float2 * pos;
+	__global float2 * dir;
+	__global float * mass;
+	__global float * radius;
 };
 
 struct Planet Planet_ctor(
-	__local float2 * pos,
-	__local float2 * dir,
-	__local float * mass,
-	__local float * radius)
+	__global float2 * pos,
+	__global float2 * dir,
+	__global float * mass,
+	__global float * radius)
 {
 	struct Planet data;
 	data.pos = pos;
@@ -23,24 +23,24 @@ struct Planet Planet_ctor(
 	return data;
 }
 
-__local float2 * GetPosition(__local float * planetData, int index)
+__global float2 * GetPosition(__global float * planetData, int index)
 {
-	return (__local float2 *) &planetData[index * PLANET_DATA_SIZE];
+	return (__global float2 *) &planetData[index * PLANET_DATA_SIZE];
 }
 
-__local float2 * GetDirection(__local float * planetData, int index)
+__global float2 * GetDirection(__global float * planetData, int index)
 {
-	return (__local float2 *) &planetData[(index * PLANET_DATA_SIZE) + 2];
+	return (__global float2 *) &planetData[(index * PLANET_DATA_SIZE) + 2];
 }
 
-__local float * GetMass(__local float * planetData, int index)
+__global float * GetMass(__global float * planetData, int index)
 {
-	return (__local float *) &planetData[(index * PLANET_DATA_SIZE) + 4];
+	return (__global float *) &planetData[(index * PLANET_DATA_SIZE) + 4];
 }
 
-__local float * GetRadius(__local float * planetData, int index)
+__global float * GetRadius(__global float * planetData, int index)
 {
-	return (__local float *) &planetData[(index * PLANET_DATA_SIZE) + 5];
+	return (__global float *) &planetData[(index * PLANET_DATA_SIZE) + 5];
 }
 
 float2 GetDirectionNextFrame(struct GlobalData * data, int index)
@@ -48,7 +48,7 @@ float2 GetDirectionNextFrame(struct GlobalData * data, int index)
     return (*GetDirection(data->planetData, index)) * data->simSpeed * data->elapsedTime;
 }
 
-struct Planet PlanetFromIndexedData(__local float * planetData, int index)
+struct Planet PlanetFromIndexedData(__global float * planetData, int index)
 {
 	struct Planet data;
 	data.pos = GetPosition(planetData, index);
